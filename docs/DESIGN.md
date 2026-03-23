@@ -194,10 +194,19 @@ over a second RPI5.
 ## Open Questions
 
 - [ ] Pendant light fixtures (delivered, not yet opened) — confirm bulb socket type
-      and whether Hue bulbs fit; if not, confirm smart switch approach
-- [ ] Sandbox server hardware decision
-- [ ] Yamaha receiver model — confirm API/control method (MusicCast, YNCA, or other)
-- [ ] WiFi LED strips in basement office — confirm brand/model; assess whether to
-      integrate or replace with Zigbee/Hue-compatible strips
-- [ ] Voice satellite hardware — confirm model when they arrive
-- [ ] Zigbee radio model — confirm (impacts which HA integration to use: ZHA vs Zigbee2MQTT)
+      and whether Hue bulbs fit; if not, smart switch approach is confirmed correct
+- [ ] Sandbox server hardware decision (x86 mini PC preferred over RPI5 for Whisper performance)
+- [ ] WiiM exact model (Mini / Pro / Amp / Ultra)
+- [ ] Magic Home LED strip exact model (check device label)
+- [ ] Vizio E60-C3 SmartCast compatibility — verify with Vizio; likely 2015 = incompatible
+- [ ] Hue Bridge generation (v2 square or v3)
+- [ ] SLZB-06M firmware version — check via SMLIGHT web UI; must be 20250220+
+
+## Resolved
+
+- [x] Yamaha receiver model — TSR-7810; uses YNCA + MusicCast; excellent HA integration via yamaha_ynca (HACS)
+- [x] WiFi LED strips — Magic Home brand; integrates via flux_led (official); no flash needed
+- [x] Voice satellite hardware — ESP32-S3-BOX-3B ×2; official HA support; arriving Tuesday
+- [x] Zigbee radio — SMLIGHT SLZB-06M; use ZHA (not Z2M); firmware update required first
+- [x] Family room receiver (Sony STR-DN2010) — 2010 model, no HA integration; replacement planned
+- [x] TiVo IPA1114HDW — confirmed Android TV streaming device (not cable box); integrates via Android TV Remote
