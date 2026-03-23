@@ -1,1 +1,20 @@
 .claude/
+
+# HA secrets — never commit
+secrets.yaml
+
+# HA runtime state — not config
+.storage/
+home-assistant.log
+home-assistant_v2.db
+home-assistant_v2.db-shm
+home-assistant_v2.db-wal
+
+# Backups (too large for git — use HA's built-in backup system)
+backups/
+*.tar
+
+# OS noise
+.DS_Store
+*.pyc
+__pycache__/
