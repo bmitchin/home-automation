@@ -29,9 +29,10 @@
   - [ ] Add DHCP reservation for satellite #2 once its IP is known
 - [x] Update satellite #1 firmware 25.12.2 → 26.6.1 (2026-07-26) — now 26.6.1 (ESPHome 2026.5.3);
       area, device name, entity IDs, pipeline and wake word all survived the OTA
-- [ ] Rename Hue "Kitchen" room entity → "Kitchen Overhead Lights" — `light.kitchen` currently has
-      friendly name "Kitchen", the same conflict pattern resolved in the Office (2026-04-05).
-      Fix before the Kitchen voice satellite goes live.
+- [x] Rename Hue "Kitchen" room → "Kitchen Overhead Lights" (2026-07-26) — renamed at the bridge via
+      CLIP v2 API (room 930fbc0d), propagated to HA. No entity is named exactly "Kitchen" any more.
+      Entity ID stays `light.kitchen`, matching the Office precedent (`light.office`) — only the
+      friendly name changed there too.
 - [ ] Assign static DHCP reservations for all WiFi/network devices
   - Yamaha TSR-7810: 192.168.200.41 (get MAC from router)
   - Magic Home TV Bias Light: 192.168.200.233 (get MAC from router)
@@ -78,6 +79,12 @@
   - Zigbee2MQTT + Mosquitto broker present alongside ZHA (docs say ZHA only — confirm which is authoritative)
   - Music Assistant, Speech-to-Phrase, File editor apps installed
   - Individual Kitchen/Family Room downlights are not assigned to any area (only the Hue Room group is)
+- [ ] Consider a "Kitchen All Lights" group mirroring `light.office_all_lights`, once the Hue
+      Lightstrip Flux is installed under-counter. Today `light.kitchen` covers all 5 downlights,
+      so a group adds nothing yet.
+- [ ] Hue "Family Room" room has the same naming pattern (`light.family_room`, friendly name
+      "Family Room") — will need the same treatment before any Family Room voice satellite.
+      WAF-critical space, so do it deliberately.
 - [x] Set up SSH access to HA (Advanced SSH & Web Terminal app, key auth) (2026-04-04)
 
 ## Completed
