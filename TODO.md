@@ -23,7 +23,13 @@
   - [x] Rename Hue "Office" group entity → "Office Overhead Lights" (2026-04-05) — resolved voice conflict; "office lights" now targets all 7 lights via Office All Lights group
 - [ ] Set up voice satellite #2 — ESP32-S3-BOX-3B — **Kitchen area** (in progress 2026-07-26)
   - [x] Rename satellite #1 entity IDs `esp32_s3_box_3_d64fe0_*` → `office_voice_satellite_*` (2026-07-26)
-  - [ ] Flash box #2 at voice.home-assistant.io, join WiFi, adopt in HA
+  - [ ] Flash box #2, join WiFi, adopt in HA. Flash from the Connect button embedded in
+        https://www.home-assistant.io/voice_control/s3_box_voice_assistant/
+        (or https://web.esphome.io → "Install Voice Assistant"). Desktop Chrome/Edge only —
+        WebSerial does not work on phone or tablet. Plug USB-C into the box directly, NOT the
+        docking station. If it doesn't enumerate, hold `boot` (upper left) while tapping
+        `reset` (lower left) to force flash mode.
+        NOTE: voice.home-assistant.io is NOT the installer — it 301s to a developer docs overview.
   - [ ] Assign to Kitchen area + rename entities → `kitchen_voice_satellite_*`
   - [ ] Resolve Hue "Kitchen" room naming conflict before go-live (see below)
   - [ ] Add DHCP reservation for satellite #2 once its IP is known
