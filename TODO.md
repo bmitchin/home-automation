@@ -27,8 +27,8 @@
   - [ ] Assign to Kitchen area + rename entities → `kitchen_voice_satellite_*`
   - [ ] Resolve Hue "Kitchen" room naming conflict before go-live (see below)
   - [ ] Add DHCP reservation for satellite #2 once its IP is known
-- [ ] Update satellite #1 firmware 25.12.2 → 26.6.1 so both satellites match
-  - A freshly flashed box #2 will land on 26.6.1; leaving #1 behind means two firmware levels
+- [x] Update satellite #1 firmware 25.12.2 → 26.6.1 (2026-07-26) — now 26.6.1 (ESPHome 2026.5.3);
+      area, device name, entity IDs, pipeline and wake word all survived the OTA
 - [ ] Rename Hue "Kitchen" room entity → "Kitchen Overhead Lights" — `light.kitchen` currently has
       friendly name "Kitchen", the same conflict pattern resolved in the Office (2026-04-05).
       Fix before the Kitchen voice satellite goes live.
