@@ -182,9 +182,11 @@ Both run the **Focused local assistant** pipeline with the **Okay Nabu** wake wo
 - **Protocol**: YNCA over network (Ethernet)
 - **HA Integration**: `yamaha_ynca` custom integration (HACS) — recommended over official Yamaha integration
 - **MusicCast**: Yes — supports Yamaha MusicCast for whole-home audio
-- **Address**: 192.168.200.41
+- **Address**: 192.168.200.41 (YNCA over TCP, port 50000)
 - **Current status**: ✅ Set up — MAIN zone customized to "Office Receiver" in `packages/audio.yaml`.
   ZONE2 is exposed but unassigned.
+- **Reference notes**: `docs/manuals/yamaha-tsr-7810.md` — includes the official manual URL,
+  how to find the receiver's IP from the front panel, and network setup notes
 
 **Setup notes**:
 - Install `yamaha_ynca` via HACS — provides richer control than the built-in Yamaha integration.
