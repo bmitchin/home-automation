@@ -1,0 +1,46 @@
+# PACKAGE: lighting
+# All office lighting groups, scenes, and automations.
+# Switch-as-X helpers (cabinet underlights) are managed via UI/integrations.
+
+light:
+  # Master group for voice commands and occupancy automation — "turn on/off the office lights"
+  - platform: group
+    name: "Office All Lights"
+    unique_id: lighting_office_all_lights
+    entities:
+      - light.hue_color_lamp_1
+      - light.hue_color_lamp_2
+      - light.office_east_over_cabinet_led
+      - light.office_south_over_cabinet_led
+      - light.north_cabinet_underlights
+      - light.east_cabinet_underlights
+      - light.south_cabinet_underlights
+      - light.tv_bias_light
+
+automation:
+  # Turn on all office lights when presence is detected.
+  # Uses radar_target (combined moving + still) so lights stay on while sitting still.
+  - id: office_occupancy_lights_on
+    alias: "Office — Lights on when occupied"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.office_occupancy_sensor_radar_target
+        to: "on"
+    action:
+      - action: light.turn_on
+        target:
+          entity_id: light.office_all_lights
+
+  # Turn off all office lights 10 minutes after presence clears.
+  # Long enough to survive the radar briefly losing a still person at the desk.
+  - id: office_occupancy_lights_off
+    alias: "Office — Lights off when vacant"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.office_occupancy_sensor_radar_target
+        to: "off"
+        for: "00:10:00"
+    action:
+      - action: light.turn_off
+        target:
+          entity_id: light.office_all_lights

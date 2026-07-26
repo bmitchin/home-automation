@@ -1,0 +1,12 @@
+# PACKAGE: audio
+# Office audio zones — WiiM smart speaker and Yamaha TSR-7810 AV receiver.
+# Both are independent devices (not connected to each other).
+
+homeassistant:
+  customize:
+    # WiiM smart speaker — standalone speaker, LinkPlay/WiFi
+    media_player.basement:
+      friendly_name: "Office Speaker"
+    # Yamaha TSR-7810 — AV receiver driving office surround speakers
+    media_player.basement_receiver_tsr_7810_main:
+      friendly_name: "Office Receiver"

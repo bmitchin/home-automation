@@ -207,6 +207,12 @@ Both run the **Focused local assistant** pipeline with the **Okay Nabu** wake wo
 - Integrated via Google Cast discovery — entity: `media_player.basement`
 - Supports: playback control, volume, source selection, grouped/synchronized playback.
 - Name the device in the WiiM app to control the entity name in HA.
+- **Duplicate entity warning**: this speaker currently appears twice — `media_player.basement`
+  (Cast) and `media_player.office_speaker` (WiiM Sound Speaker). Two integrations are claiming
+  the same hardware. Automations should target `media_player.basement`, which is the one
+  `packages/audio.yaml` customizes, until one of the two is disabled.
+- Music Assistant does not produce sound through this speaker in a sync group, while the Yamaha
+  does — under investigation.
 
 ---
 

@@ -10,7 +10,7 @@
 - [x] Pair THIRDREALITY Temp/Humidity sensors ×2 to ZHA (2026-03-30) — Desk (Office) + Kitchen
 - [x] Set up Apollo MSR-2 occupancy sensor via ESPHome integration (2026-04-05)
   - [x] Paired to HA via ESPHome, assigned to Office area
-  - [x] Occupancy automations created — lights on when occupied, off after 1 min vacancy (packages/lighting.yaml)
+  - [x] Occupancy automations created — lights on when occupied, off after 10 min vacancy (packages/lighting.yaml)
 - [x] Add Philips Hue integration + pair existing 2× Hue office overhead bulbs (2026-03-30)
 - [x] Integrate Magic Home TV Bias Light via Magic Home integration (2026-03-30) — 192.168.200.233
 - [x] Integrate Magic Home over-cabinet LEDs (2026-03-31) — Office East Over Cabinet LED + Office South Over Cabinet LED
@@ -21,7 +21,7 @@
   - [x] Flashed via the ESP Web Tools installer (the URL recorded here originally was wrong —
         see `docs/EQUIPMENT.md` for the correct one)
   - [x] Wyoming Faster Whisper + Piper installed and running
-  - [x] Rename Hue "Office" group entity → "Office Overhead Lights" (2026-04-05) — resolved voice conflict; "office lights" now targets all 7 lights via Office All Lights group
+  - [x] Rename Hue "Office" group entity → "Office Overhead Lights" (2026-04-05) — resolved voice conflict; "office lights" now targets all 8 lights via Office All Lights group
 - [x] Set up voice satellite #2 — ESP32-S3-BOX-3B — **Kitchen area** (2026-07-26)
   - [x] Rename satellite #1 entity IDs `esp32_s3_box_3_d64fe0_*` → `office_voice_satellite_*`
   - [x] Flash box #2, join WiFi, adopt in HA — firmware 26.6.1, MAC `90:e5:b1:d6:50:6c`
@@ -94,6 +94,21 @@
 - [x] Confirm Hue Bridge generation — v2 square (model 3241312018A)
 - [ ] Open pending fixture boxes — check pendant bulb socket type
 - [ ] Set up git pre-commit hook for yamllint
+- [ ] **`configuration.yaml` and `packages/` are still untracked** — CLAUDE.md states "all
+      configuration is managed as code in this git repository", which is not yet true. Commit them.
+- [ ] **`packages/audio.yaml` has drifted between repo and HA** (found 2026-07-26). The repo copy
+      is the correct one; the deployed copy customizes `media_player.basement_office`, which does
+      not exist. The real entity is `media_player.basement`. Push the repo version to
+      `/config/packages/audio.yaml`. `lighting.yaml` and `configuration.yaml` are identical.
+  - Both customize blocks are arguably redundant anyway — "Office Speaker" and "Office Receiver"
+    already come from the device registry, not from `customize:`.
+- [ ] **Duplicate media_player entities** — two "Office Speaker" (`media_player.basement` and
+      `media_player.office_speaker`) and two "Family Room TV" (`media_player.family_room_tv`
+      and `..._tv_2`). Likely Cast and WiiM/native integrations both claiming the same hardware.
+      Pick one per device and disable the other.
+- [ ] `configuration.yaml` includes `frontend: themes: !include_dir_merge_named themes` but
+      `/config/themes/` does not exist. HA is running fine, so it is tolerated — but create the
+      directory or drop the block before relying on `ha core check`.
 - [x] **Sync docs with live HA** (2026-07-26) — DESIGN.md and EQUIPMENT.md were months behind.
       Reconciled: Kitchen ×5 and Family Room ×6 Hue downlights, Hue tap dial + dimmer switches,
       Hue Bridge v2 at 192.168.200.195, both voice satellites, Apollo MSR-2, ZHA/Yamaha/WiiM status.
