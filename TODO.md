@@ -2,25 +2,45 @@
 
 ## In Progress
 
-- [ ] Connect SLZB-06M to HA via ZHA
-  - Add SMLIGHT integration (Settings → Devices & Services → SMLIGHT, auto-discovers at 192.168.200.232)
-  - Add ZHA integration (socket://192.168.200.232:6638, radio type EZSP)
-  - Confirm Zigbee firmware version reads as 20250220 once ZHA connects
+- [ ] Music Assistant multi-room audio — Office Speaker (WiiM) not producing sound in MA; Yamaha works. Investigating WiiM Cast/protocol compatibility with MA sync group.
 
 ## Phase 1 — Basement Office (next up)
 
-- [ ] Pair THIRDREALITY Smart Plugs ×4 to ZHA (pair these first — they extend the mesh)
-- [ ] Pair THIRDREALITY Temp/Humidity sensors ×2 to ZHA
-- [ ] Set up Apollo MSR-2 occupancy sensor (arriving Thursday) via ESPHome integration
-- [ ] Add Philips Hue integration + pair existing 2× Hue office overhead bulbs
-- [ ] Integrate Magic Home LED strips via flux_led integration (find IP, set DHCP reservation)
-- [ ] Set up Yamaha TSR-7810 via yamaha_ynca (HACS install required first)
-- [ ] Set up WiiM streamer via WiiM integration (HACS)
-- [ ] Set up voice satellite — ESP32-S3-BOX-3B ×2 (arriving Tuesday)
-  - Flash via HA voice installer at voice.home-assistant.io
-  - Configure Wyoming pipeline (local Whisper + Piper)
+- [x] Pair THIRDREALITY Smart Plugs ×3 to ZHA (2026-03-30) — 4th plug TBD
+- [x] Pair THIRDREALITY Temp/Humidity sensors ×2 to ZHA (2026-03-30) — Desk (Office) + Kitchen
+- [x] Set up Apollo MSR-2 occupancy sensor via ESPHome integration (2026-04-05)
+  - [x] Paired to HA via ESPHome, assigned to Office area
+  - [x] Occupancy automations created — lights on when occupied, off after 1 min vacancy (packages/lighting.yaml)
+- [x] Add Philips Hue integration + pair existing 2× Hue office overhead bulbs (2026-03-30)
+- [x] Integrate Magic Home TV Bias Light via Magic Home integration (2026-03-30) — 192.168.200.233
+- [x] Integrate Magic Home over-cabinet LEDs (2026-03-31) — Office East Over Cabinet LED + Office South Over Cabinet LED
+- [ ] Replace Office North Over Cabinet LED controller (hardware failed) — low priority
+- [x] Set up Yamaha TSR-7810 via yamaha_ynca (HACS) (2026-03-31) — 192.168.200.41, Office area
+- [x] Set up WiiM Sound Lite via WiiM Audio integration (HACS) (2026-03-30) — renamed to "Office Speaker", assigned to Office area (2026-04-05)
+- [x] Set up voice satellite #1 — ESP32-S3-BOX-3B (2026-04-04) — Office area, Wyoming local pipeline
+  - [x] Flash via voice.home-assistant.io
+  - [x] Wyoming Faster Whisper + Piper installed and running
+  - [x] Rename Hue "Office" group entity → "Office Overhead Lights" (2026-04-05) — resolved voice conflict; "office lights" now targets all 7 lights via Office All Lights group
+- [ ] Set up voice satellite #2 — ESP32-S3-BOX-3B — **Kitchen area** (in progress 2026-07-26)
+  - [x] Rename satellite #1 entity IDs `esp32_s3_box_3_d64fe0_*` → `office_voice_satellite_*` (2026-07-26)
+  - [ ] Flash box #2 at voice.home-assistant.io, join WiFi, adopt in HA
+  - [ ] Assign to Kitchen area + rename entities → `kitchen_voice_satellite_*`
+  - [ ] Resolve Hue "Kitchen" room naming conflict before go-live (see below)
+  - [ ] Add DHCP reservation for satellite #2 once its IP is known
+- [ ] Update satellite #1 firmware 25.12.2 → 26.6.1 so both satellites match
+  - A freshly flashed box #2 will land on 26.6.1; leaving #1 behind means two firmware levels
+- [ ] Rename Hue "Kitchen" room entity → "Kitchen Overhead Lights" — `light.kitchen` currently has
+      friendly name "Kitchen", the same conflict pattern resolved in the Office (2026-04-05).
+      Fix before the Kitchen voice satellite goes live.
 - [ ] Assign static DHCP reservations for all WiFi/network devices
-- [ ] Create packages/ directory structure and first package files
+  - Yamaha TSR-7810: 192.168.200.41 (get MAC from router)
+  - Magic Home TV Bias Light: 192.168.200.233 (get MAC from router)
+  - Magic Home East Over Cabinet LED: 192.168.200.215 (get MAC from router)
+  - Magic Home South Over Cabinet LED: 192.168.200.188 (get MAC from router)
+  - SLZB-06M: 192.168.200.232 (MAC 68:25:DD:47:C9:8C)
+- [x] Create packages/ directory structure and first package files (2026-04-04)
+  - packages/lighting.yaml — Office All Lights group (8 lights incl. TV bias), occupancy automations
+  - packages/audio.yaml — Office audio zones (Office Speaker + Office Receiver)
 
 ## Phase 2 — 1st Floor Kitchen & Family Room (post-remodel)
 
@@ -43,14 +63,22 @@
 
 ## Infrastructure & Housekeeping
 
-- [ ] Assign static DHCP reservation for SLZB-06M (currently 192.168.200.232)
+- [ ] Assign static DHCP reservation for SLZB-06M (MAC 68:25:DD:47:C9:8C → 192.168.200.232)
 - [ ] Decide sandbox server hardware (x86 mini PC preferred over RPI5 for Whisper)
 - [ ] Check Vizio E60-C3 SmartCast compatibility (likely 2015 = incompatible)
-- [ ] Confirm WiiM exact model (Mini / Pro / Amp / Ultra)
+- [x] Confirm WiiM exact model — WiiM Sound Lite (2026-04-05)
 - [ ] Confirm Magic Home LED strip exact model
-- [ ] Confirm Hue Bridge generation (v2 or v3)
+- [x] Confirm Hue Bridge generation — v2 square (model 3241312018A)
 - [ ] Open pending fixture boxes — check pendant bulb socket type
 - [ ] Set up git pre-commit hook for yamllint
+- [ ] **Docs are stale vs. live HA** — discovered 2026-07-26 while prepping voice satellite #2.
+      Live system has things the docs don't mention:
+  - 5× Kitchen Hue downlights (NW, NE, SW, SE, Sink) + 7× Family Room Hue downlights installed
+  - Hue tap dial switch and Hue dimmer switch paired
+  - Zigbee2MQTT + Mosquitto broker present alongside ZHA (docs say ZHA only — confirm which is authoritative)
+  - Music Assistant, Speech-to-Phrase, File editor apps installed
+  - Individual Kitchen/Family Room downlights are not assigned to any area (only the Hue Room group is)
+- [x] Set up SSH access to HA (Advanced SSH & Web Terminal app, key auth) (2026-04-04)
 
 ## Completed
 
@@ -59,6 +87,8 @@
 - [x] Create docs/PRINCIPLES.md — guiding principles north star
 - [x] Create docs/DESIGN.md — system architecture and phased plan
 - [x] Create docs/EQUIPMENT.md — verified equipment inventory
-- [x] Update SLZB-06M Core firmware: v2.9.3 → v3.2.0 (2026-03-23)
+- [x] Update SLZB-06M Core firmware: v2.9.3 → v3.2.0 (2026-03-23), then → v3.2.4 via USB reflash (2026-03-30)
 - [x] Update SLZB-06M Zigbee firmware: 20231030 → 20250220 SDK 8.0.2 (2026-03-23)
 - [x] Create device notes for SLZB-06M
+- [x] Add SMLIGHT integration to HA (2026-03-23)
+- [x] Add ZHA integration to HA — socket://192.168.200.232:6638, EZSP, flow_control=software (2026-03-30)
