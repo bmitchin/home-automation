@@ -96,12 +96,16 @@
 - [ ] Set up git pre-commit hook for yamllint
 - [ ] **`configuration.yaml` and `packages/` are still untracked** — CLAUDE.md states "all
       configuration is managed as code in this git repository", which is not yet true. Commit them.
-- [ ] **`packages/audio.yaml` has drifted between repo and HA** (found 2026-07-26). The repo copy
-      is the correct one; the deployed copy customizes `media_player.basement_office`, which does
-      not exist. The real entity is `media_player.basement`. Push the repo version to
-      `/config/packages/audio.yaml`. `lighting.yaml` and `configuration.yaml` are identical.
-  - Both customize blocks are arguably redundant anyway — "Office Speaker" and "Office Receiver"
-    already come from the device registry, not from `customize:`.
+- [x] **Resolve `packages/audio.yaml` drift between repo and HA** (2026-07-26) — pushed the repo
+      version to `/config/packages/audio.yaml`; the deployed copy had targeted
+      `media_player.basement_office`, which does not exist. Config check valid, applied with
+      `homeassistant.reload_core_config` (no restart needed for `customize:`). Old copy backed up
+      to `/config/audio.yaml.bak-20260726`, deliberately outside `packages/` so it is not loaded.
+      `lighting.yaml` and `configuration.yaml` were already identical.
+- [ ] Consider dropping the `customize:` blocks in `packages/audio.yaml` entirely — "Office Speaker"
+      and "Office Receiver" already come from the device registry, so the block changes nothing.
+      Fixing the stale target made it correct, not useful.
+- [ ] Remove `/config/audio.yaml.bak-20260726` once the change has proven stable
 - [ ] **Duplicate media_player entities** — two "Office Speaker" (`media_player.basement` and
       `media_player.office_speaker`) and two "Family Room TV" (`media_player.family_room_tv`
       and `..._tv_2`). Likely Cast and WiiM/native integrations both claiming the same hardware.
