@@ -31,6 +31,14 @@
         `reset` (lower left) to force flash mode.
         NOTE: voice.home-assistant.io is NOT the installer — it 301s to a developer docs overview.
   - [ ] Assign to Kitchen area + rename entities → `kitchen_voice_satellite_*`
+  - Sensor dock: use for power/stand only. The stock `esphome.voice-assistant` firmware defines no
+    sensor/binary_sensor/IR components, so the dock's mmWave, temp/humidity and IR are NOT exposed
+    in HA — confirmed against the upstream YAML and against satellite #1, which has zero sensor
+    entities. Unlocking them requires a custom ESPHome build.
+- [ ] Kitchen has no occupancy/presence sensor — the only real gap the sensor dock would fill.
+      Prefer a second Apollo MSR-2 (proven pattern, already used in Office) over a custom ESPHome
+      build on the voice satellite. Temp/humidity is already covered by the THIRDREALITY sensor,
+      and a dock sensor on a warm always-on box would read high anyway.
   - [ ] Resolve Hue "Kitchen" room naming conflict before go-live (see below)
   - [ ] Add DHCP reservation for satellite #2 once its IP is known
 - [x] Update satellite #1 firmware 25.12.2 → 26.6.1 (2026-07-26) — now 26.6.1 (ESPHome 2026.5.3);
