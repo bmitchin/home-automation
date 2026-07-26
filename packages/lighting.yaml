@@ -15,7 +15,10 @@ light:
       - light.north_cabinet_underlights
       - light.east_cabinet_underlights
       - light.south_cabinet_underlights
-      - light.tv_bias_light
+      # Magic Home TV bias light. The entity_id is tv_led_strip; "TV Bias Light" is
+      # only its friendly name. Referencing light.tv_bias_light silently dropped it
+      # from every group action.
+      - light.tv_led_strip
 
 automation:
   # Turn on all office lights when presence is detected.

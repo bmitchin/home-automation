@@ -149,10 +149,33 @@
       a task; delete if it stops being a live risk.)
 - [ ] **Office voice satellite #1 flaps** — ha-mcp history (2026-07-26) shows two self-recovering
       dropouts, 15:17:13→15:17:27 EDT and 15:29:57→15:56:48 EDT. It is not unplugged; it completed
-      a full voice interaction at 15:18. Check WiFi signal strength and the USB power supply.
-- [ ] **Office voice satellite has duplicate select entities** — `..._assistant` + `..._assistant_2`
-      and `..._wake_word` + `..._wake_word_2`. Probably a stale device registration left from the
-      entity-ID rename. Identify the orphan and remove it.
+      a full voice interaction at 15:18. Likely the same WiFi instability as the SLZB-06M below —
+      chase that first. Note the ESPHome firmware exposes **no WiFi signal/RSSI entity**, so
+      signal strength cannot be read from HA; check at the AP/router instead.
+- [x] **Fix `light.tv_bias_light` in `packages/lighting.yaml`** (2026-07-26) — the entity does not
+      exist; the real one is `light.tv_led_strip` ("TV Bias Light" is only its friendly name). The
+      TV bias light was silently dropped from every "Office All Lights" action, and HA logged
+      `Referenced entities light.tv_bias_light are missing or not currently available` on each run.
+      Corrected, pushed, `ha core check` passed, applied with `homeassistant.reload_all`
+      (no restart). Backup at `/config/lighting.yaml.bak-20260726`, outside `packages/`.
+- [x] ~~Office voice satellite has duplicate select entities~~ **NOT A BUG** (2026-07-26) — the
+      `_2` selects are a real ESP32-S3-BOX-3B firmware feature, not orphans. The firmware exposes
+      **two independent wake-word → pipeline slots** (unique_ids `-pipeline` / `-pipeline_2`), and
+      both satellites have them. Slot 1 = "Okay Nabu" → Focused local assistant (active);
+      slot 2 = `no_wake_word` → Home Assistant pipeline (idle, no wake word assigned).
+      Nothing to remove.
+- [ ] **Opportunity from the above:** slot 2 is free on both satellites. Could assign
+      "Hey Jarvis" → "Full local assistant" (faster_whisper) as a slow-but-smarter fallback,
+      keeping "Okay Nabu" → Speech-to-Phrase as the fast daily driver.
+- [ ] **🔴 SLZB-06M Zigbee coordinator is in a continuous reconnect loop** (found 2026-07-26) —
+      all 57 ZHA entities unavailable. `socket_uptime` resets to ~1 s every 20–30 s while device
+      uptime is 17.7 days, so the coordinator is fine but the **EZSP-over-TCP link keeps dropping**.
+      HA log: `bellows.ash.NcpFailure: NcpResetCode.ERROR_EXCEEDED_MAXIMUM_ACK_TIMEOUT_COUNT`.
+      Root cause: the SLZB-06M is running on **WiFi, not Ethernet** (`"ethernet":false,
+      "wifi_connected":true` from its `/ha_sensors` API), and ping jitter is 7.8–77.8 ms
+      (mdev 32 ms). EZSP is latency-sensitive and blows its ACK timeout on that jitter.
+      **Fix: move the SLZB-06M to wired Ethernet** — it has a PoE-capable port. This is almost
+      certainly also why the office voice satellite flaps.
 
 ## Completed
 
