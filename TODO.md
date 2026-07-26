@@ -18,29 +18,30 @@
 - [x] Set up Yamaha TSR-7810 via yamaha_ynca (HACS) (2026-03-31) — 192.168.200.41, Office area
 - [x] Set up WiiM Sound Lite via WiiM Audio integration (HACS) (2026-03-30) — renamed to "Office Speaker", assigned to Office area (2026-04-05)
 - [x] Set up voice satellite #1 — ESP32-S3-BOX-3B (2026-04-04) — Office area, Wyoming local pipeline
-  - [x] Flash via voice.home-assistant.io
+  - [x] Flashed via the ESP Web Tools installer (the URL recorded here originally was wrong —
+        see `docs/EQUIPMENT.md` for the correct one)
   - [x] Wyoming Faster Whisper + Piper installed and running
   - [x] Rename Hue "Office" group entity → "Office Overhead Lights" (2026-04-05) — resolved voice conflict; "office lights" now targets all 7 lights via Office All Lights group
-- [ ] Set up voice satellite #2 — ESP32-S3-BOX-3B — **Kitchen area** (in progress 2026-07-26)
-  - [x] Rename satellite #1 entity IDs `esp32_s3_box_3_d64fe0_*` → `office_voice_satellite_*` (2026-07-26)
-  - [ ] Flash box #2, join WiFi, adopt in HA. Flash from the Connect button embedded in
-        https://www.home-assistant.io/voice_control/s3_box_voice_assistant/
-        (or https://web.esphome.io → "Install Voice Assistant"). Desktop Chrome/Edge only —
-        WebSerial does not work on phone or tablet. Plug USB-C into the box directly, NOT the
-        docking station. If it doesn't enumerate, hold `boot` (upper left) while tapping
-        `reset` (lower left) to force flash mode.
-        NOTE: voice.home-assistant.io is NOT the installer — it 301s to a developer docs overview.
-  - [ ] Assign to Kitchen area + rename entities → `kitchen_voice_satellite_*`
+- [x] Set up voice satellite #2 — ESP32-S3-BOX-3B — **Kitchen area** (2026-07-26)
+  - [x] Rename satellite #1 entity IDs `esp32_s3_box_3_d64fe0_*` → `office_voice_satellite_*`
+  - [x] Flash box #2, join WiFi, adopt in HA — firmware 26.6.1, MAC `90:e5:b1:d6:50:6c`
+  - [x] Assign to Kitchen area + rename entities → `kitchen_voice_satellite_*` (13 registry changes)
+  - [x] Resolve Hue "Kitchen" room naming conflict before go-live
+  - [x] Pipeline set to "Focused local assistant" (Speech-to-Phrase + Piper `en_US-lessac-medium`),
+        wake word "Okay Nabu" on device — matching satellite #1
+  - Flashing procedure and gotchas are documented in `docs/EQUIPMENT.md` → Voice Satellites.
+    Note `voice.home-assistant.io` is NOT the installer — it 301s to a developer docs overview.
   - Sensor dock: use for power/stand only. The stock `esphome.voice-assistant` firmware defines no
     sensor/binary_sensor/IR components, so the dock's mmWave, temp/humidity and IR are NOT exposed
     in HA — confirmed against the upstream YAML and against satellite #1, which has zero sensor
     entities. Unlocking them requires a custom ESPHome build.
+- [ ] Verify satellite #2 end to end — say "Okay Nabu, turn on the kitchen lights" and confirm
+      mic, speaker and the `light.kitchen` rename all behave. Not verifiable from the API.
+- [ ] Satellite #1 went offline 2026-07-26 19:29 and had not returned — confirm it is plugged in
 - [ ] Kitchen has no occupancy/presence sensor — the only real gap the sensor dock would fill.
       Prefer a second Apollo MSR-2 (proven pattern, already used in Office) over a custom ESPHome
       build on the voice satellite. Temp/humidity is already covered by the THIRDREALITY sensor,
       and a dock sensor on a warm always-on box would read high anyway.
-  - [ ] Resolve Hue "Kitchen" room naming conflict before go-live (see below)
-  - [ ] Add DHCP reservation for satellite #2 once its IP is known
 - [x] Update satellite #1 firmware 25.12.2 → 26.6.1 (2026-07-26) — now 26.6.1 (ESPHome 2026.5.3);
       area, device name, entity IDs, pipeline and wake word all survived the OTA
 - [x] Rename Hue "Kitchen" room → "Kitchen Overhead Lights" (2026-07-26) — renamed at the bridge via
@@ -53,15 +54,22 @@
   - Magic Home East Over Cabinet LED: 192.168.200.215 (get MAC from router)
   - Magic Home South Over Cabinet LED: 192.168.200.188 (get MAC from router)
   - SLZB-06M: 192.168.200.232 (MAC 68:25:DD:47:C9:8C)
+  - Hue Bridge v2: 192.168.200.195 (get MAC from router)
+  - Office Voice Satellite: 192.168.200.144 (MAC 90:E5:B1:D6:4F:E0)
+  - Kitchen Voice Satellite: 192.168.200.78 (MAC 90:E5:B1:D6:50:6C)
+  - Apollo MSR-2 (Office Occupancy): 192.168.200.44
 - [x] Create packages/ directory structure and first package files (2026-04-04)
   - packages/lighting.yaml — Office All Lights group (8 lights incl. TV bias), occupancy automations
   - packages/audio.yaml — Office audio zones (Office Speaker + Office Receiver)
 
-## Phase 2 — 1st Floor Kitchen & Family Room (post-remodel)
+## Phase 2 — 1st Floor Kitchen & Family Room (partially deployed ahead of remodel)
 
-- [ ] Kitchen: Philips Hue downlights, Hue Lightstrip Flux under-counter
+- [x] Kitchen: Philips Hue downlights ×5 installed (NW, NE, SW, SE, Sink) + Hue dimmer switch
+- [x] Family Room: Hue downlights ×6 installed (N, NE, NW, S, SE, SW) + Hue tap dial switch
+- [x] Kitchen: voice satellite #2 (2026-07-26)
+- [ ] Kitchen: Hue Lightstrip Flux under-counter (on hand, awaiting remodel)
 - [ ] Kitchen/Family Room: smart switches for pendant fixtures
-- [ ] Family Room: Hue downlights, smart outlets for lamps and seasonal
+- [ ] Family Room: smart outlets for lamps and seasonal
 - [ ] Family Room: replace Sony STR-DN2010 with IP-controllable receiver
 - [ ] Expand whole-home audio with WiiM speakers
 - [ ] Integrate Samsung UN49MU7000 (Samsung Smart TV integration)
@@ -86,13 +94,15 @@
 - [x] Confirm Hue Bridge generation — v2 square (model 3241312018A)
 - [ ] Open pending fixture boxes — check pendant bulb socket type
 - [ ] Set up git pre-commit hook for yamllint
-- [ ] **Docs are stale vs. live HA** — discovered 2026-07-26 while prepping voice satellite #2.
-      Live system has things the docs don't mention:
-  - 5× Kitchen Hue downlights (NW, NE, SW, SE, Sink) + 7× Family Room Hue downlights installed
-  - Hue tap dial switch and Hue dimmer switch paired
-  - Zigbee2MQTT + Mosquitto broker present alongside ZHA (docs say ZHA only — confirm which is authoritative)
-  - Music Assistant, Speech-to-Phrase, File editor apps installed
-  - Individual Kitchen/Family Room downlights are not assigned to any area (only the Hue Room group is)
+- [x] **Sync docs with live HA** (2026-07-26) — DESIGN.md and EQUIPMENT.md were months behind.
+      Reconciled: Kitchen ×5 and Family Room ×6 Hue downlights, Hue tap dial + dimmer switches,
+      Hue Bridge v2 at 192.168.200.195, both voice satellites, Apollo MSR-2, ZHA/Yamaha/WiiM status.
+  - Resolved the ZHA vs Zigbee2MQTT question: **ZHA is authoritative** (111 entities). Z2M and
+    Mosquitto are installed but hold zero devices — there is no `mqtt` platform in the registry.
+- [ ] Assign individual Kitchen/Family Room downlights to their HA areas — currently only the Hue
+      Room group carries an area, so area-scoped automations see one light per room, not five or six
+- [ ] Music Assistant, Speech-to-Phrase and File editor apps are installed but undocumented —
+      decide whether they are keepers and note them if so
 - [ ] Consider a "Kitchen All Lights" group mirroring `light.office_all_lights`, once the Hue
       Lightstrip Flux is installed under-counter. Today `light.kitchen` covers all 5 downlights,
       so a group adds nothing yet.

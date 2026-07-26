@@ -10,6 +10,7 @@
 | Model | SLZB-06M |
 | MAC Address | 68:25:DD:47:C9:8C |
 | mDNS | SLZB-06M.local |
+| AP SSID (after factory reset) | `SLZB-06M_215069` |
 | IP Address | 192.168.200.232 (DHCP — assign static reservation) |
 | Network | Fioptics24719 (WiFi client mode) |
 | Web UI | http://192.168.200.232/ |
@@ -18,8 +19,8 @@
 
 | Component | Chip | Before | After | Date Updated |
 |---|---|---|---|---|
-| Core (ESP32) | ESP32-S3 (2× 240MHz, 16MB flash, 520KB RAM) | v2.9.3 | v3.2.0 | 2026-03-23 |
-| Zigbee Radio | EFR32MG21 (1× 80MHz, 768KB flash, 96KB RAM) | 20231030 | 20250220 (SDK 8.0.2) | 2026-03-23 |
+| Core (ESP32) | ESP32-S3 (2× 240MHz, 16MB flash, 520KB RAM) | v2.9.3 | v3.2.4 | v3.2.0 OTA 2026-03-23; v3.2.4 USB reflash 2026-03-30 |
+| Zigbee Radio | EFR32MG21 (1× 80MHz, 768KB flash, 96KB RAM) | 20231030 | 20250220 (SDK 8.0.2) | 2026-03-23 (bundled in v3.2.4) |
 
 ---
 
@@ -32,7 +33,9 @@
 | HA Integration | ZHA (not Zigbee2MQTT) | More stable with SLZB-06M; simpler config for beginner setup |
 | ZHA socket | `socket://192.168.200.232:6638` | Network coordinator address; port 6638 is SLZB default |
 | ZHA radio type | EZSP | Required for EFR32MG21 + SDK 8.0.2 firmware |
+| usePackets | ON | Required for ZHA — must re-apply after every factory reset |
 | SMLIGHT integration | Added separately | Monitors coordinator health, firmware, LED, uptime in HA |
+| ZHA integration | socket://192.168.200.232:6638, EZSP, flow_control=software | Active as of 2026-03-30 |
 
 ### Why EZSP and not Zigbee2MQTT
 The 20250220 firmware uses SDK 8.0.2 and requires `adapter: ember` in Zigbee2MQTT config.
@@ -85,6 +88,47 @@ asyncio.run(main())
 
 **Install if needed:** `pip3 install playwright --break-system-packages`
 **Note:** Do NOT use port 9222 for Chrome remote debugging — another project uses that port. Use 9223+.
+
+### Factory Reset
+
+Hold the reset button (recessed, requires pin/paperclip) until **yellow + blue LEDs flash together**, then release. All settings (WiFi credentials, custom config) are erased.
+
+After reset:
+1. Look for WiFi AP `SLZB-06M_215069` on phone/laptop
+2. Connect to that AP
+3. Navigate to `http://192.168.1.1`
+4. Re-enter WiFi credentials and save
+
+**Reference video:** https://youtu.be/ps-x_-CQXp0?t=139
+
+### USB Firmware Recovery (if factory reset fails or radio is unresponsive)
+
+If the device won't connect after factory reset, or the EFR32MG21 Zigbee radio is unresponsive
+(port 6638 closed, `zb_version: 0` or `-1` even after ZHA connects):
+1. Connect SLZB-06M via USB to a computer with Chrome/Edge
+2. Go to **https://smlight.tech/flasher** (requires WebSerial API)
+3. Select **SLZB-06/MR Series** — the flasher flashes a **combined image** (Core + Zigbee bundled)
+4. Choose the latest stable release (e.g., v3.2.4) — avoid beta/RC versions
+5. Flash completes in one step; device reboots automatically
+
+**Note:** The OTA update method (web UI or curl API) updates Core and Zigbee separately.
+The USB flasher bundles both — it's the preferred recovery path for hardware-level issues.
+
+### Required Setting After Factory Reset or WiFi Reconfiguration
+
+**"Enable Zigbee Socket packet processing" (`usePackets`) must be ON for ZHA.** Factory reset clears this — always re-apply before adding ZHA.
+
+```bash
+# Enable usePackets (required for ZHA)
+curl -s -X POST "http://192.168.200.232/settings/saveParams" \
+  -d "pageId=3&usePackets=on"
+# Response must show: "changes":{"usePackets":true},"needReboot":true
+
+# Then reboot
+curl -s "http://192.168.200.232/api2?action=1&param=reboot"
+```
+
+---
 
 ### Direct API Endpoints (much faster than UI automation)
 
@@ -188,7 +232,7 @@ await page.evaluate("document.getElementById('BUTTON_ID').click()")
 ## 4. Open Items
 
 - [ ] Assign static IP via DHCP reservation on router (current: 192.168.200.232)
-- [ ] Add SMLIGHT integration to HA (Settings → Devices & Services → SMLIGHT)
-- [ ] Add ZHA integration to HA (`socket://192.168.200.232:6638`, radio type EZSP)
+- [x] Add SMLIGHT integration to HA (Settings → Devices & Services → SMLIGHT)
+- [x] Add ZHA integration to HA (`socket://192.168.200.232:6638`, radio type EZSP, flow_control=software) — 2026-03-30
 - [ ] Consider switching to Ethernet once office cabling is in place (more reliable than WiFi)
 - [ ] Enable "Automatic Zigbee Update" after ZHA is stable (currently Off)
