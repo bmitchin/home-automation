@@ -131,6 +131,28 @@
       Verified the Hue tap dial switch is unaffected: its behavior_instance binds rooms and scenes
       by UUID, not by name, and remains enabled/running.
 - [x] Set up SSH access to HA (Advanced SSH & Web Terminal app, key auth) (2026-04-04)
+- [x] **Install the ha-mcp server** (2026-07-26) — `homeassistant-ai/ha-mcp` v7.14.2 as an HA app
+      (slug `81f33d0f_ha_mcp`, boot: auto). Adds 74 live tools vs the ~24 Assist-scoped intents the
+      built-in `/api/mcp` server provides — most importantly automation traces, history and logs,
+      which were previously undiagnosable. Installed guarded: tool security policies on, auto-backup
+      on, snapshot delete off, and the four hard-delete tools (`ha_remove_device`, `ha_remove_entity`,
+      `ha_remove_area_or_floor`, `ha_remove_helpers_integrations`) disabled. Both MCP servers run
+      side by side for now.
+- [ ] **Revisit the HACS in-process ha-mcp component after an HA Core upgrade to >= 2026.6.0**
+      (box is on 2026.3.4). It is the project's recommended install and removes the separate app
+      container, but the Core version gate blocks it today.
+- [ ] **Decide whether to drop the built-in `/api/mcp` server** after the ha-mcp trial period.
+      It costs near-zero idle context (Opus defers tool loading) and is a useful fallback, but it
+      is largely redundant with ha-mcp apart from its Assist-exposure scoping.
+- [ ] Do not author automations via ha-mcp's `ha_config_set_automation` — it writes to `.storage`,
+      which PRINCIPLES.md §4 forbids. Authoring stays in `packages/` via SSH. (Guardrail note, not
+      a task; delete if it stops being a live risk.)
+- [ ] **Office voice satellite #1 flaps** — ha-mcp history (2026-07-26) shows two self-recovering
+      dropouts, 15:17:13→15:17:27 EDT and 15:29:57→15:56:48 EDT. It is not unplugged; it completed
+      a full voice interaction at 15:18. Check WiFi signal strength and the USB power supply.
+- [ ] **Office voice satellite has duplicate select entities** — `..._assistant` + `..._assistant_2`
+      and `..._wake_word` + `..._wake_word_2`. Probably a stale device registration left from the
+      entity-ID rename. Identify the orphan and remove it.
 
 ## Completed
 
