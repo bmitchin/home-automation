@@ -82,9 +82,11 @@
 - [ ] Consider a "Kitchen All Lights" group mirroring `light.office_all_lights`, once the Hue
       Lightstrip Flux is installed under-counter. Today `light.kitchen` covers all 5 downlights,
       so a group adds nothing yet.
-- [ ] Hue "Family Room" room has the same naming pattern (`light.family_room`, friendly name
-      "Family Room") — will need the same treatment before any Family Room voice satellite.
-      WAF-critical space, so do it deliberately.
+- [x] Rename Hue "Family Room" room → "Family Room Overhead Lights" (2026-07-26) — renamed at the
+      bridge (room 7f6c0172), propagated to HA. All three Hue rooms now follow the
+      "<Area> Overhead Lights" convention. Entity ID stays `light.family_room`.
+      Verified the Hue tap dial switch is unaffected: its behavior_instance binds rooms and scenes
+      by UUID, not by name, and remains enabled/running.
 - [x] Set up SSH access to HA (Advanced SSH & Web Terminal app, key auth) (2026-04-04)
 
 ## Completed
