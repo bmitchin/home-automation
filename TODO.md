@@ -37,7 +37,9 @@
     entities. Unlocking them requires a custom ESPHome build.
 - [ ] Verify satellite #2 end to end — say "Okay Nabu, turn on the kitchen lights" and confirm
       mic, speaker and the `light.kitchen` rename all behave. Not verifiable from the API.
-- [ ] Satellite #1 went offline 2026-07-26 19:29 and had not returned — confirm it is plugged in
+- [x] ~~Satellite #1 went offline 2026-07-26 19:29 and had not returned~~ — **it did return**
+      (2026-07-26). It recovered on its own at 15:56:48 EDT and is not unplugged. Now tracked as an
+      intermittent-flapping issue under Infrastructure & Housekeeping below.
 - [ ] Kitchen has no occupancy/presence sensor — the only real gap the sensor dock would fill.
       Prefer a second Apollo MSR-2 (proven pattern, already used in Office) over a custom ESPHome
       build on the voice satellite. Temp/humidity is already covered by the THIRDREALITY sensor,
