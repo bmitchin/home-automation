@@ -191,3 +191,9 @@
 - [x] Create device notes for SLZB-06M
 - [x] Add SMLIGHT integration to HA (2026-03-23)
 - [x] Add ZHA integration to HA — socket://192.168.200.232:6638, EZSP, flow_control=software (2026-03-30)
+- [x] Create "Vietnam Protest Songs" Spotify playlist (2026-08-13) — 89 tracks, ~6h04m, private.
+      Strict anti-war protest songs, 1962-1973 era. https://open.spotify.com/playlist/6SEw6NdhJSCO9R9w8yqEvA
+- [x] Create "Counterculture, 1962–1972" Spotify playlist (2026-08-13) — companion to the above,
+      191 tracks, ~12h40m, private. Broader counterculture (civil rights, psychedelia, Laurel Canyon,
+      Eastern spirituality) sequenced into 8 sonic movements with a minimum 6-track artist spacing.
+      https://open.spotify.com/playlist/6UH42wIRoQ2HYIKUsEJo5J
