@@ -1,6 +1,18 @@
-# Equipment Inventory
+# Equipment — Home Assistant integration status
 
-Verified equipment list with Home Assistant integration status. Last updated: 2026-07-26.
+How each device in the house is integrated into Home Assistant: which
+integration, how to pair it, what it exposes, and what to watch out for.
+Last updated: 2026-08-23.
+
+> **Hardware facts live in the `my-hardware` repository**, not here. Make,
+> model, serial, MAC, IP, firmware version, physical location and the physical
+> gotchas are recorded in `my-hardware/devices/<id>.md` — see its `INDEX.md`.
+>
+> This file records **Home Assistant knowledge** only. The two are deliberately
+> not duplicated: if you need to know what a thing *is*, look there; if you need
+> to know how HA talks to it, look here.
+>
+> Path: `/home/mitchiner/Documents/projects/my-hardware`
 
 **Status icons:**
 - ✅ Supported — works well
@@ -13,26 +25,26 @@ Verified equipment list with Home Assistant integration status. Last updated: 20
 
 ## Quick Reference
 
-| Device | Category | Room | Protocol | HA Integration | Status |
-|---|---|---|---|---|---|
-| SMLIGHT SLZB-06M | Zigbee Coordinator | — | Zigbee 3.0 / WiFi | ZHA | ✅ Core v3.2.4, Zigbee 20250220 |
-| THIRDREALITY Smart Plug Gen3 ×4 | Smart Plug | Basement Office | Zigbee 3.0 | ZHA | ✅ 3 paired (cabinet underlights); 4th spare |
-| THIRDREALITY Temp/Humidity ×2 | Sensor | Office + Kitchen | Zigbee 3.0 | ZHA | ✅ Set up |
-| Apollo MSR-2 mmWave | Occupancy Sensor | Basement Office | WiFi / ESPHome | ESPHome | ✅ Set up — drives occupancy automations |
-| ESP32-S3-BOX-3B ×2 | Voice Satellite | Office + Kitchen | ESPHome / WiFi | Official HA voice | ✅ Both set up, firmware 26.6.1 |
-| Yamaha TSR-7810 | AV Receiver | Basement Office | YNCA / Network | yamaha_ynca (HACS) | ✅ Set up — 192.168.200.41 |
-| WiiM Sound Lite | Smart Speaker | Basement Office | LinkPlay / WiFi | WiiM (HACS) | ✅ Set up |
-| Sony STR-DN2010 | AV Receiver | 1F Family Room | Ethernet | ⛔ None | — |
-| Vizio E60-C3 | TV | Basement Office | WiFi | SmartCast (official) | ⚠️ 2015 model — verify |
-| Samsung UN49MU7000 | TV | 1F Family Room | WiFi / WebSocket | Samsung Smart TV | 🔲 Connected, not set up |
-| TiVo Stream 4K IPA1114HDW | Streaming Device | 1F Family Room | Android TV / WiFi | Android TV Remote | 🔲 In use, not set up |
-| Philips Hue Bridge v2 | Zigbee Hub | — | Zigbee / Ethernet | Philips Hue (official) | ✅ Set up — 192.168.200.195 |
-| Hue Color Ambiance Slim Downlights 5/6" | Smart Lighting | Kitchen ×5 / Family Room ×6 | Zigbee via Bridge | Philips Hue (official) | ✅ Installed and in use |
-| Hue Lightstrip Flux 10ft | Smart Lighting | Kitchen | Zigbee via Bridge | Philips Hue (official) | 📦 On hand, not installed |
-| Hue bulbs ×2 | Smart Lighting | Basement Office | Zigbee via Bridge | Philips Hue (official) | ✅ In use |
-| Hue tap dial switch | Wall Control | 1F Family Room | Zigbee via Bridge | Philips Hue (official) | ✅ In use |
-| Hue dimmer switch | Wall Control | Kitchen | Zigbee via Bridge | Philips Hue (official) | ✅ In use |
-| Magic Home LED strips | LED Strips | Basement Office | WiFi | flux_led (official) | ✅ East + South + TV bias in HA |
+| Device | Room | HA Integration | Status | Hardware record |
+|---|---|---|---|---|
+| SMLIGHT SLZB-06M | — | ZHA | ✅ Core v3.2.4, Zigbee 20250220 | `slzb-06m` |
+| THIRDREALITY Smart Plug Gen3 ×4 | Basement Office | ZHA | ✅ 3 paired (cabinet underlights); 4th spare | `thirdreality-smart-plug-gen3` |
+| THIRDREALITY Temp/Humidity ×2 | Office + Kitchen | ZHA | ✅ Set up | `thirdreality-temp-humidity` |
+| Apollo MSR-2 mmWave | Basement Office | ESPHome | ✅ Set up — drives occupancy automations | `apollo-msr-2` |
+| ESP32-S3-BOX-3B ×2 | Office + Kitchen | Official HA voice | ✅ Both set up, firmware 26.6.1 | `esp32-s3-box-3b` |
+| Yamaha TSR-7810 | Basement Office | yamaha_ynca (HACS) | ✅ Set up | `yamaha-tsr-7810` |
+| WiiM Sound Lite | Basement Office | WiiM (HACS) | ⚠️ Set up — duplicate entity, see below | `wiim-sound-lite` |
+| Sony STR-DN2010 | 1F Family Room | ⛔ None | — | `sony-str-dn2010` |
+| Vizio E60-C3 | Basement Office | SmartCast (official) | ⚠️ 2015 model — verify | `vizio-e60-c3` |
+| Samsung UN49MU7000 | 1F Family Room | Samsung Smart TV | 🔲 Connected, not set up | `samsung-un49mu7000` |
+| TiVo Stream 4K | 1F Family Room | Android TV Remote | 🔲 In use, not set up | `tivo-stream-4k` |
+| Philips Hue Bridge v2 | Basement Office | Philips Hue (official) | ✅ Set up | `hue-bridge-v2` |
+| Hue Slim Downlights ×11 | Kitchen ×5 / Family Room ×6 | Philips Hue (official) | ✅ Installed and in use | `hue-downlights` |
+| Hue Lightstrip Flux 10ft | Kitchen | Philips Hue (official) | 📦 On hand, not installed | `hue-lightstrip-flux` |
+| Hue bulbs ×2 | Basement Office | Philips Hue (official) | ✅ In use | `hue-bulbs` |
+| Hue tap dial switch | 1F Family Room | Philips Hue (official) | ✅ In use | `hue-tap-dial` |
+| Hue dimmer switch | Kitchen | Philips Hue (official) | ✅ In use | `hue-dimmer` |
+| Magic Home LED strips | Basement Office | flux_led (official) | ⚠️ East + South + TV bias; North failed | `magic-home-led` |
 
 ---
 
@@ -40,24 +52,40 @@ Verified equipment list with Home Assistant integration status. Last updated: 20
 
 ### SMLIGHT SLZB-06M — Zigbee Coordinator
 
-- **Manufacturer**: SMLIGHT
-- **Protocol**: Zigbee 3.0 (IEEE 802.15.4); supports Thread/Matter-over-Thread via alternate firmware
-- **Connectivity**: Ethernet (primary), WiFi, USB
 - **HA Integration**: ZHA (Zigbee Home Automation)
-- **Address**: 192.168.200.232, `socket://192.168.200.232:6638`, EZSP, `flow_control=software`
-- **Firmware**: Core v3.2.4, Zigbee 20250220 (SDK 8.0.2)
+- **ZHA config**: `socket://192.168.200.232:6638`, radio type **EZSP**,
+  `flow_control=software`
 - **Current status**: ✅ Set up — 111 ZHA entities in service
 
-**Setup notes:**
-- **ZHA is the authoritative Zigbee stack here.** Zigbee2MQTT and a Mosquitto broker are also
-  installed as HA Apps, but hold **zero devices** — there is no `mqtt` platform in the entity
-  registry. Treat ZHA as the only Zigbee integration; the Z2M install is vestigial.
-- The Hue Bridge runs a **separate** Zigbee network. Hue devices pair to the bridge, not to ZHA.
-- The SMLIGHT integration (separate from ZHA) monitors coordinator health, firmware, and temps.
-- **`usePackets` must be ON for ZHA** and is cleared by a factory reset — always re-apply.
-- Currently on WiFi. Ethernet is still preferred once office cabling is in place.
+**Why EZSP and not Zigbee2MQTT**: the 20250220 firmware uses SDK 8.0.2 and
+requires `adapter: ember` in a Z2M config. ZHA handles this natively via EZSP
+with no extra configuration. For a new setup with no existing Z2M config, ZHA is
+the right choice and avoids the stability issues reported with this coordinator
+under Z2M.
 
-See `docs/device notes - zigbee coordinator - SLZB-06M.md` for the full recovery and API reference.
+**Setup notes:**
+- **ZHA is the authoritative Zigbee stack here.** Zigbee2MQTT and a Mosquitto
+  broker are also installed as HA Apps, but hold **zero devices** — there is no
+  `mqtt` platform in the entity registry. Treat ZHA as the only Zigbee
+  integration; the Z2M install is vestigial.
+- The Hue Bridge runs a **separate** Zigbee network. Hue devices pair to the
+  bridge, not to ZHA.
+- The SMLIGHT integration (separate from ZHA) monitors coordinator health,
+  firmware and temps.
+- **`usePackets` must be ON for ZHA** and is cleared by a factory reset — always
+  re-apply before adding ZHA:
+
+  ```bash
+  curl -s -X POST "http://192.168.200.232/settings/saveParams" -d "pageId=3&usePackets=on"
+  # Response must show: "changes":{"usePackets":true},"needReboot":true
+  curl -s "http://192.168.200.232/api2?action=1&param=reboot"
+  ```
+
+Firmware history, the API reference, the USB recovery procedure and the reason
+the web UI cannot be scraped are all in `my-hardware/devices/slzb-06m.md`.
+
+**Open HA-side items:**
+- [ ] Enable "Automatic Zigbee Update" once ZHA is stable (currently Off)
 
 ---
 
@@ -65,61 +93,43 @@ See `docs/device notes - zigbee coordinator - SLZB-06M.md` for the full recovery
 
 ### THIRDREALITY Smart Plug Gen3 (×4)
 
-- **Manufacturer**: THIRDREALITY
-- **Protocol**: Zigbee 3.0
-- **Rating**: 15A
 - **HA Integration**: ZHA
-- **Model**: 3RSP02064Z
-- **Current status**: ✅ 3 paired — North / East / South Cabinet Underlights (Basement Office).
-  4th plug is a spare.
-
-**Features**: Power on/off, real-time energy monitoring (±1% accuracy), power-on state
-restoration, timer. Also functions as a Zigbee mesh repeater — extending coordinator range.
+- **Current status**: ✅ 3 paired — North / East / South Cabinet Underlights
+  (Basement Office). 4th plug is a spare.
 
 **Setup notes**:
 - Pair via ZHA. Community reports more reliable pairing through ZHA than Z2M.
-- The three cabinet plugs are exposed as **lights, not switches**, via Switch-as-X helpers so
-  they participate in the `light.office_all_lights` group and respond to lighting automations.
-
----
+- The three cabinet plugs are exposed as **lights, not switches**, via
+  Switch-as-X helpers so they participate in the `light.office_all_lights` group
+  and respond to lighting automations.
+- They report real-time energy use, which is available for energy dashboards.
 
 ### THIRDREALITY Zigbee Temperature & Humidity Sensor (×2)
 
-- **Manufacturer**: THIRDREALITY
-- **Model**: 3RTHS24BZ (LCD display, confirmed)
-- **Protocol**: Zigbee 3.0
-- **Battery**: 2× AAA, ~1 year life
 - **HA Integration**: ZHA — fully supported
+- **Pairing**: press and hold the side button for 5 seconds until the cloud icon
+  blinks on the LCD, then find it within the 60-second ZHA pairing window.
 
-**Specs**: ±1°C temp accuracy, ±2% RH humidity, 20-second refresh, LCD display
+These are the **preferred temperature source** for the office and kitchen. Both
+other candidates in those rooms (the Apollo MSR-2 and the voice satellite dock)
+self-heat and read high.
 
-**Pairing**: Press and hold the side button for 5 seconds until the cloud icon blinks on the LCD — sensor is in pairing mode. HA will discover it within the 60-second ZHA pairing window.
+### Apollo Automation MSR-2 mmWave Multisensor
 
----
-
-### Apollo Automation MSR-2 mmWave Multisensor (LD2410B)
-
-- **Manufacturer**: Apollo Automation
-- **Protocol**: WiFi (ESP32-C3); **not Zigbee**
 - **HA Integration**: ESPHome (official Apollo Automation integration)
 - **Current status**: ✅ Set up — Basement Office, device "Office Occupancy Sensor"
 
-**Sensors included**: mmWave occupancy (still-person detection), LUX, UV, temperature,
-pressure, RGB LED, piezo buzzer.
-
 **Setup notes**:
-- Connect to "Apollo MSR-2 Hotspot" WiFi on first boot, select home network, device
-  auto-discovers in HA via ESPHome integration.
-- **Temperature readings require a +3–5°C offset** — the ESP32-C3 generates heat in
-  constant WiFi mode which affects the onboard temp sensor. Not recommended as a primary
-  temperature source; use the THIRDREALITY sensors for that.
-- Excellent for occupancy: the mmWave chip detects stationary people (sitting at desk,
-  watching TV) that PIR sensors miss. This is the right sensor for "keep lights on while
-  someone is in the room."
-- For mesh WiFi networks: manually enter SSID during setup rather than scanning.
-- **In use by**: `binary_sensor.office_occupancy_sensor_radar_target` drives both office
-  occupancy automations in `packages/lighting.yaml`. `radar_target` combines moving + still
-  detection, so lights stay on while someone sits still.
+- Connect to "Apollo MSR-2 Hotspot" WiFi on first boot, select the home network,
+  and the device auto-discovers in HA via ESPHome.
+- For mesh WiFi networks, enter the SSID manually rather than scanning.
+- **Do not use its temperature reading as a primary source** — it needs a +3–5°C
+  offset because the ESP32-C3 self-heats. Use the THIRDREALITY sensors instead.
+
+**In use by**: `binary_sensor.office_occupancy_sensor_radar_target` drives both
+office occupancy automations in `packages/lighting.yaml`. `radar_target`
+combines moving + still detection, so lights stay on while someone sits still —
+this is the whole reason for choosing mmWave over PIR.
 
 ---
 
@@ -127,49 +137,31 @@ pressure, RGB LED, piezo buzzer.
 
 ### ESP32-S3-BOX-3B (×2)
 
-- **Manufacturer**: Espressif
-- **Protocol**: ESPHome native API over WiFi
-- **HA Integration**: Official Home Assistant voice satellite (`assist_satellite`)
-- **Firmware**: 26.6.1 (ESPHome 2026.5.3) — both units
+- **HA Integration**: official Home Assistant voice satellite (`assist_satellite`)
 - **Current status**: ✅ Both set up
 
-| Unit | Area | Device name | Entity prefix | MAC |
-|---|---|---|---|---|
-| #1 | Office | Office Voice Satellite | `office_voice_satellite_*` | `90:e5:b1:d6:4f:e0` |
-| #2 | Kitchen | Kitchen Voice Satellite | `kitchen_voice_satellite_*` | `90:e5:b1:d6:50:6c` |
+| Unit | Area | Device name | Entity prefix |
+|---|---|---|---|
+| #1 | Office | Office Voice Satellite | `office_voice_satellite_*` |
+| #2 | Kitchen | Kitchen Voice Satellite | `kitchen_voice_satellite_*` |
 
-Both run the **Focused local assistant** pipeline with the **Okay Nabu** wake word detected
-**on device** (microWakeWord, no cloud).
+Both run the **Focused local assistant** pipeline with the **Okay Nabu** wake
+word detected **on device** (microWakeWord, no cloud).
 
-**Flashing**:
-- Use the **Connect** button embedded in
-  `https://www.home-assistant.io/voice_control/s3_box_voice_assistant/`, or
-  `https://web.esphome.io` → *Install Voice Assistant*. The "Using the ESP32-S3-BOX-3" tab
-  covers both the BOX-3 and the BOX-3B — same firmware.
-- **`voice.home-assistant.io` is not an installer** — it redirects to a developer docs overview.
-- Desktop Chrome/Edge only; WebSerial is unavailable on phone and tablet.
-- Plug USB-C **into the box directly, not the docking station**.
-- If the box doesn't enumerate, force flash mode: hold `boot` (upper left) while tapping
-  `reset` (lower left).
-- On Linux the port is `/dev/ttyACM0`, owned `root:dialout` and advertised as
-  *"Espressif USB JTAG/serial debug unit"* (`303a:1001`). A user not in `dialout` cannot open
-  it — grant access with `sudo setfacl -m u:$USER:rw /dev/ttyACM0`.
-
-**Sensor dock**:
-- The ESP32-S3-BOX-3-SENSOR dock is useful as a **stand and power source only**. The stock
-  voice-assistant firmware defines no `sensor`, `binary_sensor`, or IR components, so the dock's
-  mmWave, temperature/humidity and IR are **not exposed in HA**.
-- Unlocking them requires a custom ESPHome build, giving up the precompiled firmware. Not
-  worth it here — THIRDREALITY sensors already cover temp/humidity in both rooms, and a sensor
-  mounted on a warm always-on box reads high (same self-heating issue as the Apollo MSR-2).
+**What lives where**: device name, area, entity IDs and pipeline selection live
+in HA. Firmware, WiFi credentials and the wake-word model live on the box. A
+power cycle loses nothing; a reflash resets the device side.
 
 **Behaviour notes**:
-- Firmware, WiFi credentials and the wake word model live on the box's flash; device name, area,
-  entity IDs and pipeline selection live in HA. A power cycle loses nothing — verified across the
-  25.12.2 → 26.6.1 OTA. Reflashing *does* reset the device side.
-- Touchscreen can display custom information (clock, active media, etc.).
-- On 26.6.1 the `speaker_enable` switch is reported `disabled_by: integration` — expected, not a
-  fault.
+- The touchscreen can display custom information (clock, active media, etc.).
+- On 26.6.1 the `speaker_enable` switch reports `disabled_by: integration` —
+  expected, not a fault.
+- The sensor dock's mmWave, temperature/humidity and IR are **not exposed in
+  HA** and cannot be without a custom ESPHome build. Not worth it — see the
+  hardware record for why.
+
+The flashing procedure and its gotchas are in
+`my-hardware/devices/esp32-s3-box-3b.md`.
 
 ---
 
@@ -177,64 +169,48 @@ Both run the **Focused local assistant** pipeline with the **Okay Nabu** wake wo
 
 ### Yamaha TSR-7810 — Basement Office Receiver
 
-- **Manufacturer**: Yamaha
-- **Type**: 7.2-channel AV receiver, Dolby Atmos / DTS:X, 4K
-- **Protocol**: YNCA over network (Ethernet)
-- **HA Integration**: `yamaha_ynca` custom integration (HACS) — recommended over official Yamaha integration
-- **MusicCast**: Yes — supports Yamaha MusicCast for whole-home audio
-- **Address**: 192.168.200.41 (YNCA over TCP, port 50000)
-- **Current status**: ✅ Set up — MAIN zone customized to "Office Receiver" in `packages/audio.yaml`.
-  ZONE2 is exposed but unassigned.
-- **Reference notes**: `docs/manuals/yamaha-tsr-7810.md` — includes the official manual URL,
-  how to find the receiver's IP from the front panel, and network setup notes
+- **HA Integration**: `yamaha_ynca` custom integration (HACS) — richer control
+  than the built-in Yamaha integration
+- **GitHub**: https://github.com/mvdwetering/yamaha_ynca
+- **Current status**: ✅ Set up — MAIN zone customized to "Office Receiver" in
+  `packages/audio.yaml`. ZONE2 is exposed but unassigned.
+- Supports power, volume, mute, source selection and playback controls.
+- MusicCast is also supported and enables multi-room coordination with other
+  MusicCast devices.
 
-**Setup notes**:
-- Install `yamaha_ynca` via HACS — provides richer control than the built-in Yamaha integration.
-- Supports: power, volume, mute, source selection, playback controls.
-- MusicCast integration enables multi-room audio coordination with other MusicCast devices.
-- YNCA protocol only accepts one connection at a time — HA will hold the connection.
-
----
+**YNCA accepts one connection at a time and HA holds it.** Nothing else can talk
+to the receiver's control port while the integration is running — stop it first
+before debugging with another client.
 
 ### WiiM Sound Lite — Basement Office Speaker
 
-- **Manufacturer**: WiiM (Linkplay Technology)
-- **Model**: WiiM Sound Lite
-- **Protocol**: LinkPlay over WiFi
 - **HA Integration**: WiiM Audio (HACS, by mjcumming) — integrated via Google Cast
-- **Current status**: ✅ Set up — Basement Office
-- **Manual**: `docs/manuals/wiim-sound-lite.pdf`
+- **Current status**: ✅ Set up — entity `media_player.basement`
+- Supports playback control, volume, source selection and grouped playback.
 
-**Setup notes**:
-- Integrated via Google Cast discovery — entity: `media_player.basement`
-- Supports: playback control, volume, source selection, grouped/synchronized playback.
-- Name the device in the WiiM app to control the entity name in HA.
-- **Duplicate entity warning**: this speaker currently appears twice — `media_player.basement`
-  (Cast) and `media_player.office_speaker` (WiiM Sound Speaker). Two integrations are claiming
-  the same hardware. Automations should target `media_player.basement`, which is the one
-  `packages/audio.yaml` customizes, until one of the two is disabled.
-- Music Assistant does not produce sound through this speaker in a sync group, while the Yamaha
-  does — under investigation.
+**Duplicate entity warning**: this speaker currently appears twice —
+`media_player.basement` (Cast) and `media_player.office_speaker` (WiiM Sound
+Speaker). Two integrations are claiming the same hardware. Automations should
+target `media_player.basement`, which is the one `packages/audio.yaml`
+customizes, until one of the two is disabled.
 
----
+**Open**: Music Assistant does not produce sound through this speaker in a sync
+group, while the Yamaha does. Under investigation.
+
+Name the device in the WiiM app to control the entity name in HA.
 
 ### Sony STR-DN2010 — 1F Family Room Receiver
 
-- **Manufacturer**: Sony
-- **Type**: 7.1-channel AV receiver
-- **Year**: 2010
-- **Protocol**: Ethernet / DLNA (streaming only, no control API)
-- **HA Integration**: ⛔ None. Sony Songpal integration supports 2014+ models only.
+- **HA Integration**: ⛔ None. Sony Songpal supports 2014+ models only.
 - **Current status**: In use, family room
 
 **Options until replaced**:
-- IR blaster (e.g., Broadlink RM4 Pro) for basic power/volume/source control via IR
-- Harmony Hub (if already owned) for consolidated remote + HA bridge
-- Manual remote only — acceptable since family room is Phase 2 and receiver replacement
-  is already planned
+- IR blaster (e.g. Broadlink RM4 Pro) for basic power/volume/source control
+- Harmony Hub for a consolidated remote plus HA bridge
+- Manual remote only — acceptable, since family room is Phase 2 and receiver
+  replacement is already planned
 
-**Note**: Replacement with an IP-controllable receiver is already in the project plan.
-This device's lack of HA integration does not block Phase 1 work.
+This device's lack of an integration does not block Phase 1 work.
 
 ---
 
@@ -242,81 +218,62 @@ This device's lack of HA integration does not block Phase 1 work.
 
 ### Vizio E60-C3 — Basement Office TV
 
-- **Manufacturer**: Vizio
-- **Type**: 60" 1080p Full HD Smart TV
-- **Year**: 2015
-- **Protocol**: WiFi (802.11n)
-- **HA Integration**: VIZIO SmartCast (official) — **but SmartCast requires 2016+ models**
-- **Current status**: In use, basement office
+- **HA Integration**: VIZIO SmartCast (official) — **but SmartCast requires
+  2016+ models**, and this is a 2015 set
+- **Current status**: In use, likely display-only
 
-**Likely incompatible** with the HA SmartCast integration. Verify at
-`support.vizio.com` — search E60-C3 and confirm SmartCast support.
-
-If not compatible: treat as display-only for now. Basic power/input control may be
-achievable via IR blaster if needed.
-
----
+Verify at `support.vizio.com`. If incompatible, an IR blaster is the fallback
+for power and input control.
 
 ### Samsung UN49MU7000 — 1F Family Room TV
 
-- **Manufacturer**: Samsung
-- **Type**: 49" 4K UHD Smart TV
-- **Year**: 2016
-- **Protocol**: WiFi / WebSocket
 - **HA Integration**: Samsung Smart TV (official) — fully supported
-- **Current status**: Connected via WiFi, not set up in HA
+- **Current status**: Connected via WiFi, not yet set up in HA
+- Supports power, volume, source and media state.
 
 **Setup notes**:
-- HA and TV must be on the **same subnet**. Will not work across VLANs.
-- Assign a static IP to the TV (via router DHCP reservation) to prevent connection drops.
-- Set TV access permission to "First time only" (Settings > General > External Device Manager)
-  to avoid per-session approval prompts.
-- Supports: power, volume, source, media state.
+- HA and the TV must be on the **same subnet**. This will not work across VLANs.
+- Assign a static IP via a router DHCP reservation to prevent connection drops.
+- Set TV access permission to "First time only"
+  (`Settings > General > External Device Manager`) to avoid a per-session
+  approval prompt on screen.
 
----
+### TiVo Stream 4K — 1F Family Room
 
-### TiVo Stream 4K — 1F Family Room (Model IPA1114HDW)
-
-- **Manufacturer**: TiVo / eStream
-- **Type**: Android TV streaming media player — **not a traditional cable box**
-- **Protocol**: Android TV / WiFi
 - **HA Integration**: Android TV Remote (official) — fully supported
-- **Current status**: In use, family room
+- **Current status**: In use, not yet set up
+- Auto-discovered via the Android TV Remote integration. Supports media
+  controls, app launching and volume. Requires Android TV Remote Service
+  (pre-installed).
 
-**Note**: This device aggregates streaming services (Netflix, Hulu, etc.) and live TV
-apps. It does not decode a cable signal or control a cable subscription directly. It runs
-Android TV, which is what HA integrates with.
-
-**Setup notes**: Auto-discovered via Android TV Remote integration. Supports media
-controls, app launching, volume. Requires Android TV Remote Service (pre-installed).
+**This is an Android TV streaming player, not a cable box** — it aggregates
+streaming apps and does not decode a cable signal. HA integrates with Android
+TV, not with TiVo.
 
 ---
 
 ## Lighting
 
-### Philips Hue Color Ambiance Slim Downlights 5/6" + Hue Bridge
+### Philips Hue Bridge v2 and the Slim Downlights
 
-- **Manufacturer**: Philips Hue
-- **Protocol**: Zigbee (via Hue Bridge) — bridge connects via Ethernet
 - **HA Integration**: Philips Hue (official) — excellent
-- **Bridge**: v2 square, model 3241312018A, **192.168.200.195**
-- **Current status**: ✅ Installed — Kitchen ×5 (NW, NE, SW, SE, Sink), Family Room ×6
-  (N, NE, NW, S, SE, SW)
+- **Current status**: ✅ Installed — Kitchen ×5 (NW, NE, SW, SE, Sink),
+  Family Room ×6 (N, NE, NW, S, SE, SW)
 
 **Setup notes**:
-- Hue Bridge connects to router via Ethernet. Add the Philips Hue integration in HA —
-  press the button on the bridge when prompted.
-- The Hue Bridge runs a separate Zigbee network from the SLZB-06M. Hue devices pair
-  directly to the bridge, not to ZHA.
-- Supports full color, brightness, scenes, and group control.
-- Up to 50 bulbs per bridge.
+- Add the Philips Hue integration in HA and press the button on the bridge when
+  prompted.
+- The Hue Bridge runs a separate Zigbee network from the SLZB-06M. Hue devices
+  pair directly to the bridge, not to ZHA.
+- Supports full colour, brightness, scenes and group control.
 
 **Room naming convention — matters for voice control**:
 
-A Hue *Room* surfaces in HA as a single group light entity. If the room is named after the area
-it sits in, Assist ends up with an entity literally named "Kitchen" inside the Kitchen area, which
-collides with area-based voice commands. All three rooms are therefore renamed to
-`<Area> Overhead Lights` **at the bridge**:
+A Hue *Room* surfaces in HA as a single group light entity. If the room is named
+after the area it sits in, Assist ends up with an entity literally named
+"Kitchen" inside the Kitchen area, which collides with area-based voice
+commands. All three rooms are therefore renamed to `<Area> Overhead Lights`
+**at the bridge**:
 
 | Hue room | HA entity | Members |
 |---|---|---|
@@ -324,12 +281,13 @@ collides with area-based voice commands. All three rooms are therefore renamed t
 | Kitchen Overhead Lights | `light.kitchen` | 5 downlights + dimmer switch |
 | Family Room Overhead Lights | `light.family_room` | 6 downlights + tap dial switch |
 
-- Rename **at the bridge**, not as an HA override — that is what propagates the name into HA.
-- A rename changes the friendly name only; **entity IDs do not follow**, which is why they remain
-  `light.office` / `light.kitchen` / `light.family_room`. Assist matches on friendly name, so this
-  is sufficient.
-- Direct bridge API (CLIP v2, self-signed cert so `curl -sk`); the application key lives in HA's
-  `/config/.storage/core_config_entries` under the `hue` entry:
+- Rename **at the bridge**, not as an HA override — that is what propagates the
+  name into HA.
+- A rename changes the friendly name only; **entity IDs do not follow**, which
+  is why they remain `light.office` / `light.kitchen` / `light.family_room`.
+  Assist matches on friendly name, so this is sufficient.
+- Direct bridge API (CLIP v2, self-signed cert so `curl -sk`); the application
+  key lives in HA's `/config/.storage/core_config_entries` under the `hue` entry:
 
 ```bash
 curl -sk -X PUT -H "hue-application-key: $KEY" -H "Content-Type: application/json" \
@@ -337,64 +295,43 @@ curl -sk -X PUT -H "hue-application-key: $KEY" -H "Content-Type: application/jso
   https://192.168.200.195/clip/v2/resource/room/<room-id>
 ```
 
-- **Known gap**: the individual downlights are not assigned to any HA area — only the Room group
-  is. Area-scoped automations therefore see one light per room, not five or six.
-
----
+- **Known gap**: the individual downlights are not assigned to any HA area —
+  only the Room group is. Area-scoped automations therefore see one light per
+  room, not five or six.
 
 ### Philips Hue Tap Dial Switch + Dimmer Switch
 
-- **Protocol**: Zigbee via Hue Bridge
 - **HA Integration**: Philips Hue (official)
 - **Current status**: ✅ In use — tap dial in Family Room, dimmer in Kitchen
 
-Both are physical wall controls and are members of their respective Hue rooms. Their button
-behaviours are stored as bridge `behavior_instance` resources that reference rooms and scenes
+Both are members of their respective Hue rooms. Their button behaviours are
+stored as bridge `behavior_instance` resources that reference rooms and scenes
 **by UUID, not by name** — so renaming a Hue room does not disturb them.
-
----
 
 ### Philips Hue Lightstrip Flux 10ft
 
-- **Manufacturer**: Philips Hue
-- **Protocol**: Zigbee via Hue Bridge
-- **Color temperature**: 1,000K–20,000K (very warm to very cool daylight)
-- **Brightness**: 4,800–6,000 lumens
-- **HA Integration**: Philips Hue (official) — same integration as other Hue devices
+- **HA Integration**: Philips Hue (official) — same integration as everything else
 - **Current status**: On hand, not yet installed (kitchen under-counter — post-remodel)
-
----
 
 ### Philips Hue Bulbs ×2 — Basement Office Overhead
 
-- **Manufacturer**: Philips Hue
-- **Protocol**: Zigbee via Hue Bridge
 - **HA Integration**: Philips Hue (official)
 - **Current status**: ✅ In use — Phase 1 starting point
 
----
-
 ### Magic Home WiFi LED Strips — Basement Office
 
-- **Manufacturer**: Magic Home (exact model unknown)
-- **Protocol**: WiFi (proprietary Magic Home protocol)
-- **HA Integration**: `flux_led` (official HA integration) — no firmware flash required
-- **Current status**: ✅ East, South and TV bias in HA. North controller failed — needs replacement.
-
-**Known IPs** (assign DHCP reservations):
-- TV Bias Light: 192.168.200.233 (MAC TBD)
-- Office East Over Cabinet LED: 192.168.200.215 (MAC TBD)
-- Office South Over Cabinet LED: 192.168.200.188 (MAC TBD)
-- Office North Over Cabinet LED: controller needs replacement
+- **HA Integration**: `flux_led` (official) — no firmware flash required
+- **Current status**: ✅ East, South and TV bias in HA. North controller failed
+  — needs replacement.
 
 **Setup notes**:
-- Add via Settings > Integrations > Magic Home in HA — enter IP address.
-- Supports: on/off, color, brightness, effects.
-- Assign a static IP (DHCP reservation) to prevent the IP changing after a router restart.
-- **Longer-term**: consider replacing with Zigbee/Hue-compatible LED controllers to
-  consolidate onto one ecosystem and eliminate WiFi dependency.
-
-**Open question**: Confirm exact Magic Home model number (check device label or app).
+- Add via `Settings > Integrations > Magic Home` and enter the IP address.
+- Supports on/off, colour, brightness and effects.
+- **These are configured by IP and sit on plain DHCP.** Assign reservations —
+  a router restart silently breaks them. The IPs are recorded in
+  `my-hardware/devices/magic-home-led.md`.
+- **Longer-term**: consider replacing with Zigbee/Hue-compatible controllers to
+  consolidate onto one ecosystem and remove the WiFi dependency.
 
 ---
 
@@ -433,16 +370,31 @@ ahead of satellite #2.
 `mqtt` platform in the entity registry. **ZHA is the authoritative Zigbee stack.** The Z2M install
 is vestigial; don't infer a dual-stack setup from its presence.
 
+### 7. Hardware Facts Split Out To `my-hardware` — 2026-08-23
+**Problem**: This file mixed two different kinds of knowledge — what a device *is*
+(model, serial, MAC, IP, firmware, physical gotchas) and how HA talks to it. The
+first kind belongs with all the other house hardware, most of which HA never sees.
+**Resolution**: Hardware identity moved to the `my-hardware` repository, one record
+per device under `devices/`. This file keeps the HA-side knowledge and links across.
+Nothing is recorded in both places. The `Hardware record` column in the Quick
+Reference gives each device's record id.
+
 ---
 
 ## Open Questions
 
 - [x] WiiM exact model — confirmed WiiM Sound Lite
-- [x] Hue Bridge — confirmed v2 square (model 3241312018A), 192.168.200.195
-- [x] Yamaha TSR-7810 — confirmed on the network at 192.168.200.41 and set up in HA
+- [x] Hue Bridge — confirmed v2 square, and its HA area is Office
+- [x] Yamaha TSR-7810 — confirmed on the network and set up in HA
 - [x] SLZB-06M firmware version — Core v3.2.4, Zigbee 20250220 (SDK 8.0.2)
-- [ ] Magic Home LED strip exact model (check device label)
 - [ ] Vizio E60-C3 SmartCast compatibility — verify with Vizio support
 - [ ] Assign individual Kitchen/Family Room downlights to their HA areas — currently only the
       Hue Room group carries an area
 - [ ] Replace the failed Office North Over Cabinet LED controller
+- [ ] Resolve the duplicate WiiM entity (`media_player.basement` vs
+      `media_player.office_speaker`)
+- [ ] `living_room`, `bedroom` and `family_room` have no floor assigned in the HA
+      floor registry, though the family room is documented as 1st floor
+
+> Hardware-side open questions (Magic Home model and MACs, the router's make and
+> model, the HA host's Pi model) now live in `my-hardware/TODO.md`.

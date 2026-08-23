@@ -19,7 +19,7 @@
 - [x] Set up WiiM Sound Lite via WiiM Audio integration (HACS) (2026-03-30) — renamed to "Office Speaker", assigned to Office area (2026-04-05)
 - [x] Set up voice satellite #1 — ESP32-S3-BOX-3B (2026-04-04) — Office area, Wyoming local pipeline
   - [x] Flashed via the ESP Web Tools installer (the URL recorded here originally was wrong —
-        see `docs/EQUIPMENT.md` for the correct one)
+        see `my-hardware/devices/esp32-s3-box-3b.md` for the correct one)
   - [x] Wyoming Faster Whisper + Piper installed and running
   - [x] Rename Hue "Office" group entity → "Office Overhead Lights" (2026-04-05) — resolved voice conflict; "office lights" now targets all 8 lights via Office All Lights group
 - [x] Set up voice satellite #2 — ESP32-S3-BOX-3B — **Kitchen area** (2026-07-26)
@@ -29,7 +29,7 @@
   - [x] Resolve Hue "Kitchen" room naming conflict before go-live
   - [x] Pipeline set to "Focused local assistant" (Speech-to-Phrase + Piper `en_US-lessac-medium`),
         wake word "Okay Nabu" on device — matching satellite #1
-  - Flashing procedure and gotchas are documented in `docs/EQUIPMENT.md` → Voice Satellites.
+  - Flashing procedure and gotchas are documented in `my-hardware/devices/esp32-s3-box-3b.md`.
     Note `voice.home-assistant.io` is NOT the installer — it 301s to a developer docs overview.
   - Sensor dock: use for power/stand only. The stock `esphome.voice-assistant` firmware defines no
     sensor/binary_sensor/IR components, so the dock's mmWave, temp/humidity and IR are NOT exposed
